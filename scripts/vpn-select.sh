@@ -2,12 +2,12 @@
 set -eEo pipefail
 
 # Configuration
-CONFIGS_PATH="/etc/openvpn/client"
+CONFIGS_PATH="${HOME}/.config/openvpn"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PID_FILE="${SCRIPT_DIR}/vpn.pid"
 
 # Find available VPN configurations (.ovpn files)
-mapfile -t configs < <(sudo find "${CONFIGS_PATH}" -maxdepth 1 -name "*.ovpn" 2>/dev/null | sort)
+mapfile -t configs < <(find "${CONFIGS_PATH}" -maxdepth 1 -name "*.ovpn" 2>/dev/null | sort)
 
 if [[ ${#configs[@]} -eq 0 ]]; then
   echo "No OpenVPN configurations (.ovpn files) found in ${CONFIGS_PATH}"
@@ -33,8 +33,8 @@ select vpn_config in "${configs[@]}"; do
     config_file="${vpn_config}"
     
     # Check for credentials in comments (format: # VPN_USER=username)
-    user=$(sudo sed -n 's/^[#;]\s*VPN_USER=\(.*\)/\1/p' "${config_file}" | head -n 1 | tr -d '\r')
-    pass=$(sudo sed -n 's/^[#;]\s*VPN_PASSWORD=\(.*\)/\1/p' "${config_file}" | head -n 1 | tr -d '\r')
+    user=$(sed -n 's/^[#;]\s*VPN_USER=\(.*\)/\1/p' "${config_file}" | head -n 1 | tr -d '\r')
+    pass=$(sed -n 's/^[#;]\s*VPN_PASSWORD=\(.*\)/\1/p' "${config_file}" | head -n 1 | tr -d '\r')
     
     if [[ -z "$user" ]]; then
       # Prompt user if not found in config

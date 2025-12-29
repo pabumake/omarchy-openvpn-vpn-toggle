@@ -12,7 +12,7 @@ PID_FILE="${SCRIPT_DIR}/vpn.pid"
 if [[ -f "${PID_FILE}" ]] && ps -p $(cat "${PID_FILE}") > /dev/null 2>&1; then
   # VPN is running, stop it
   echo "Stopping VPN..."
-  sudo kill $(cat "${PID_FILE}")
+   sudo kill $(cat "${PID_FILE}")
   rm -f "${PID_FILE}"
   # Clean up auth file
   rm -f "${SCRIPT_DIR}"/.vpn_auth_*
@@ -21,7 +21,7 @@ else
   # VPN is not running, start it
   config_file="${VPN_CONFIG_PATH}"
   
-  if ! sudo test -f "${config_file}"; then
+  if !  test -f "${config_file}"; then
     echo "Error: Config file not found: ${config_file}"
     exit 1
   fi
@@ -42,7 +42,7 @@ else
   chmod 600 "${auth_file}"
   
   # Start OpenVPN with auth file
-  sudo openvpn --config "${config_file}" --auth-user-pass "${auth_file}" --daemon
+   sudo openvpn --config "${config_file}" --auth-user-pass "${auth_file}" --daemon
   
   # Wait a moment for openvpn to start, then get its PID
   sleep 1

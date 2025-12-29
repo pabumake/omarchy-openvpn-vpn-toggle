@@ -24,7 +24,7 @@ GITHUB_BRANCH="main"
 # Runtime configuration
 WAYBAR_CONFIG_DIR="${HOME}/.config/waybar"
 SCRIPTS_DIR="${WAYBAR_CONFIG_DIR}/scripts"
-VPN_CONFIGS_PATH="/etc/openvpn/client"
+VPN_CONFIGS_PATH="${HOME}/.config/openvpn"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "/tmp")"
 REPO_SCRIPTS_DIR="${SCRIPT_DIR}/scripts"
 TEMP_INSTALL_DIR=""
@@ -243,7 +243,6 @@ main() {
   show_completion_message
   restart_waybar
 }
-
 check_dependencies() {
   print_info "Checking dependencies..."
 
@@ -279,12 +278,12 @@ check_openvpn_configs() {
   if [[ ! -d "${VPN_CONFIGS_PATH}" ]]; then
     print_warning "OpenVPN configuration directory not found: ${VPN_CONFIGS_PATH}"
     print_info "Creating directory..."
-    sudo mkdir -p "${VPN_CONFIGS_PATH}"
-    sudo chmod 755 "${VPN_CONFIGS_PATH}"
+    mkdir -p "${VPN_CONFIGS_PATH}"
+    chmod 755 "${VPN_CONFIGS_PATH}"
   fi
 
   local ovpn_count
-  ovpn_count=$(sudo find "${VPN_CONFIGS_PATH}" -maxdepth 1 -name "*.ovpn" 2>/dev/null | wc -l)
+  ovpn_count=$(find "${VPN_CONFIGS_PATH}" -maxdepth 1 -name "*.ovpn" 2>/dev/null | wc -l)
   
   if [[ ${ovpn_count} -eq 0 ]]; then
     print_warning "No OpenVPN .ovpn files found in ${VPN_CONFIGS_PATH}"
@@ -343,7 +342,7 @@ install_scripts() {
 create_vpn_config() {
   if [[ ! -f "${SCRIPTS_DIR}/vpn.conf" ]]; then
     local first_config
-    first_config=$(sudo find "${VPN_CONFIGS_PATH}" -maxdepth 1 -name "*.ovpn" 2>/dev/null | head -n 1)
+    first_config=$(find "${VPN_CONFIGS_PATH}" -maxdepth 1 -name "*.ovpn" 2>/dev/null | head -n 1)
     
     if [[ -n "${first_config}" ]]; then
       local vpn_name
@@ -462,7 +461,6 @@ update_waybar_styles() {
     print_warning "style.css not found at ${style_file}"
   fi
 }
-
 configure_firewall() {
   if command -v ufw &>/dev/null && sudo ufw status | grep -q "Status: active"; then
     echo ""
@@ -474,7 +472,7 @@ configure_firewall() {
       if sudo ufw allow in on tun+ && sudo ufw allow out on tun+; then
         print_success "Added UFW rules for tun+ interface"
       else
-        print_error "Failed to add UFW rules"
+        print_warning "Failed to add UFW rules"
       fi
     fi
   fi
@@ -537,7 +535,7 @@ show_completion_message() {
   echo ""
   print_info "Next steps:"
   echo "  1. Restart Waybar (you'll be prompted next)"
-  echo "  2. Add .ovpn files to ${VPN_CONFIGS_PATH} with: sudo cp file.ovpn ${VPN_CONFIGS_PATH}/"
+  echo "  2. Add .ovpn files to ${VPN_CONFIGS_PATH} with: cp file.ovpn ${VPN_CONFIGS_PATH}/"
   echo "  3. Right-click the VPN icon to select VPN and enter credentials"
   echo "  4. Left-click the VPN icon to toggle connection"
   echo ""
@@ -567,5 +565,4 @@ restart_waybar() {
   print_success "Waybar restarted"
 }
 
-# Run main function
 main "$@"

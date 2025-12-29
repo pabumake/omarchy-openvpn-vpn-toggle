@@ -23,7 +23,7 @@ Based on the guide from [Omarchy Discussion #1366](https://github.com/basecamp/o
 - **jq** (JSON processor for safe config manipulation)
 - **OpenVPN configuration files** (.ovpn files from your VPN provider)
   - Downloaded from providers like VPNBook, ProtonVPN, NordVPN, etc.
-  - Placed in `/etc/openvpn/client/`
+  - Placed in `~/.config/openvpn/`
   - Username and password will be configured via the selection menu
 
 ### Install Dependencies
@@ -52,10 +52,10 @@ wget -qO- https://raw.githubusercontent.com/JacobusXIII/omarchy-wireguard-vpn-to
 
 This will:
 - Automatically detect one-liner mode
-- Download the repository to /tmp
 - Run the full installation with interactive prompts
 - Clean up temporary files when done
-- Ask for sudoers configuration (optional passwordless toggling)
+- Ask for sudoers configuration (optional passwordless toggling)eractive prompts
+- Clean up temporary files when done
 
 **Note:** You'll need OpenVPN configuration files (.ovpn) and credentials before the VPN toggle will work (see step 2 below).
 
@@ -78,9 +78,9 @@ If you haven't already, you need OpenVPN configuration files (.ovpn) from your V
 
 1. Visit the [VPNBook free VPN page](https://www.vpnbook.com/)
 2. Download OpenVPN configuration files (UDP recommended)
-3. Copy them to `/etc/openvpn/client/`:
+3. Copy them to `~/.config/openvpn/`:
    ```bash
-   sudo cp vpnbook-*.ovpn /etc/openvpn/client/
+   cp vpnbook-*.ovpn ~/.config/openvpn/
    ```
 4. Note the username and password shown on the VPNBook website
 
@@ -88,9 +88,9 @@ If you haven't already, you need OpenVPN configuration files (.ovpn) from your V
 
 1. Visit the [ProtonVPN downloads page](https://account.protonvpn.com/downloads)
 2. Download OpenVPN configuration files (UDP recommended)
-3. Copy them to `/etc/openvpn/client/`:
+3. Copy them to `~/.config/openvpn/`:
    ```bash
-   sudo cp your-config.ovpn /etc/openvpn/client/
+   cp your-config.ovpn ~/.config/openvpn/
    ```
 4. Use your ProtonVPN account credentials
 
@@ -98,7 +98,7 @@ See the [ProtonVPN OpenVPN guide](https://protonvpn.com/support/linux-openvpn) f
 
 **For other VPN providers:**
 
-Most VPN providers offer OpenVPN configuration files. Download the .ovpn files and copy them to `/etc/openvpn/client/`. You'll configure credentials through the selection menu (right-click on the VPN icon).
+Most VPN providers offer OpenVPN configuration files. Download the .ovpn files and copy them to `~/.config/openvpn/`. You'll configure credentials through the selection menu (right-click on the VPN icon).
 
 #### 3. Run the Installer
 
@@ -112,8 +112,8 @@ The installer will:
 - ✅ Install scripts to `~/.config/waybar/scripts/`
 - ✅ Add `custom/vpn` module to Omarchy's Waybar config (after network module)
 - ✅ Add `#custom-vpn` to style.css alongside `#custom-omarchy`
-- ✅ Optionally configure sudoers for passwordless operation
-
+- ✅ Optionally configure sudoers for passwordless operationnetwork module)
+- ✅ Add `#custom-vpn` to style.css alongside `#custom-omarchy`
 #### 4. Restart Waybar
 
 ```bash
@@ -237,6 +237,7 @@ The installer creates/modifies these files:
 - `*.backup.YYYYMMDD-HHMMSS` - Timestamped backups of modified files
 
 ## Troubleshooting
+## Troubleshooting
 
 ### Password Prompt When Toggling
 
@@ -249,8 +250,7 @@ If you're prompted for your sudo password when toggling VPN:
    ```
 
 ### VPN Icon Not Appearing
-
-1. **Check Waybar config is valid JSON:**
+### VPN Icon Not Appearings valid JSON:**
    ```bash
    cat ~/.config/waybar/config.jsonc | jq
    ```
@@ -272,16 +272,16 @@ If you're prompted for your sudo password when toggling VPN:
 
 ### "No OpenVPN configurations found"
 
-Ensure you have `.ovpn` files in `/etc/openvpn/client/`:
+Ensure you have `.ovpn` files in `~/.config/openvpn/`:
 
 ```bash
-sudo ls -lh /etc/openvpn/client/
+ls -lh ~/.config/openvpn/
 ```
 
 If empty, download configuration files from your VPN provider (VPNBook, ProtonVPN, etc.) and copy them:
 
 ```bash
-sudo cp your-config.ovpn /etc/openvpn/client/
+cp your-config.ovpn ~/.config/openvpn/
 ```
 
 ### Connection Fails

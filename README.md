@@ -29,13 +29,13 @@ sudo pacman -S openvpn waybar jq
 One-liner:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/daniel-mekuria/omarchy-openvpn-vpn-toggle/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/pabumake/omarchy-openvpn-vpn-toggle/main/install.sh | bash
 ```
 
 Or local clone:
 
 ```bash
-git clone https://github.com/daniel-mekuria/omarchy-openvpn-vpn-toggle.git
+git clone https://github.com/pabumake/omarchy-openvpn-vpn-toggle.git
 cd omarchy-openvpn-vpn-toggle
 ./install.sh
 ```
